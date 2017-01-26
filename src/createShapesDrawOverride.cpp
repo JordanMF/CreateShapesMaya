@@ -233,11 +233,6 @@ MUserData* CreateShapesDrawOverride::prepareForDraw(const MDagPath& objPath, con
 
 void CreateShapesDrawOverride::addUIDrawables(const MDagPath& objPath, MHWRender::MUIDrawManager& drawManager, const MHWRender::MFrameContext& frameContext, const MUserData* data)
 {
-    // Draw text
-    MPoint textPos(0.0, 0.0, 0.0);
-    MColor textColor(0.1f, 0.8f, 0.8f, 1.0f);
-    MColor meshColor(1.0f, 0.0f, 0.0f, 1.0f);
-    
     drawManager.beginDrawable();
     
     if(drawShapes)
@@ -250,7 +245,7 @@ void CreateShapesDrawOverride::addUIDrawables(const MDagPath& objPath, MHWRender
     }
 
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCubeVertices() , NULL, NULL, shape.GetCubeIndices(), NULL);
-    drawManager.setColor(meshColor);
+    drawManager.setColor(MColor(1.0f, 0.0f, 0.0f, 1.0f));
     //drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCylinderVertices(), NULL, NULL, shape.GetCylinderIndices(), NULL);
     drawManager.setColor(MColor(0.0f, 1.0f, 0.0f, 1.0f));
     //drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCapsuleVertices(), NULL, NULL, shape.GetCapsuleIndices(), NULL);
@@ -396,10 +391,10 @@ void CreateShapesDrawOverride::draw(const MHWRender::MDrawContext& context, cons
     {
         // Use some monotone version of) color to show "default material mode"
         //
-        //if) (displayStyle & MHWRender::MFrameContext::kDefaultMaterial)
-        //{
-        //	color[0] = color[1] = color[2] = (color[0] + color[1] + color[2]) / 3.0f;
-        //}
+        if (displayStyle & MHWRender::MFrameContext::kDefaultMaterial)
+        {
+        	color[0] = color[1] = color[2] = (color[0] + color[1] + color[2]) / 3.0f;
+        }
         // Do some alpha blending if) in x-ray mode
         //
         if (displayStyle & MHWRender::MFrameContext::kXray)

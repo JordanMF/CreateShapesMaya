@@ -24,8 +24,6 @@ public:
     void endDraw() override;
     
     void DrawDisc(float radius, int divisions, bool filled);
-    //void DrawCube(GLfloat width, GLfloat height, GLfloat depth, glFloat3 position, glFloat4 rotation, GLubyte r, GLubyte g, GLubyte b, bool filled);
-    void DrawCube(glFloat3 position, glFloat4 rotation, GLubyte r, GLubyte g, GLubyte b, bool filled);
     
     void setMatrix(const MHWRender::MDrawContext& context) override
     {

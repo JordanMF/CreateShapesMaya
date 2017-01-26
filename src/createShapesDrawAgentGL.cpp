@@ -45,45 +45,19 @@ void CreateShapesDrawAgentGL::drawShaded()
     /// set color
     glColor4fv(&(mColor.r));
     
-    //    glBegin(GL_TRIANGLE_FAN);
-    //    int i;
-    //    int last = soleCount - 1;
-    //    for ( i = 0; i < last; ++i )
-    //    {
-    //        glNormal3f(0.0f, 1.0f, 0.0f );
-    //        glVertex3f(sole[i][0],
-    //                   sole[i][1],
-    //                   sole[i][2]);
-    //    }
-    //    glEnd();
-    //    glBegin(GL_TRIANGLE_FAN);
-    //    last = heelCount - 1;
-    //    for (i = 0; i < last; ++i)
-    //    {
-    //        glNormal3f(0.0f, 1.0f, 0.0f);
-    //        glVertex3f(heel[i][0],
-    //                   heel[i][1],
-    //                   heel[i][2]);
-    //    }
-    //    glEnd();
-    
 //    glPushAttrib(GL_CURRENT_BIT);
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//    glDepthMask(GL_FALSE);
-    
-    //MColor solidColour, wireColour;
-    
-    //DrawReflection(m_srcPoint, m_destPoint);
-    DrawDisc(1.0f, 32, true);
-    //DrawCube(1, 1, 1, glFloat3(0.0, 0.0, 0.0), glFloat4(0.0, 0.0, 0.0, 0.0f), 255, 0, 0, true);
-    //DrawCube(glFloat3(0.0, 0.0, 0.0), glFloat4(0.0, 0.0, 0.0, 0.0f), 255, 0, 0, true);
-    
-//    glDepthMask(GL_TRUE);
-//    glDisable(GL_BLEND);
+    //    glEnable(GL_BLEND);
+    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //    glDepthMask(GL_FALSE);
+        
+        //MColor solidColour, wireColour;
+        
+        //DrawReflection(m_srcPoint, m_destPoint);
+        DrawDisc(1.0f, 32, true);
+        
+    //    glDepthMask(GL_TRUE);
+    //    glDisable(GL_BLEND);
 //    glPopAttrib();
-    
-    
 }
 
 void CreateShapesDrawAgentGL::drawBoundingBox()
@@ -142,46 +116,19 @@ void CreateShapesDrawAgentGL::drawWireframe()
 {
     // set color
     glColor4fv(&(mColor.r));
-    //
-    //    // draw wire
-    //    glBegin(GL_LINES);
-    //    int i;
-    //    int last = soleCount - 1;
-    //    for (i = 0; i < last; ++i)
-    //    {
-    //        glVertex3f(sole[i][0],
-    //                   sole[i][1],
-    //                   sole[i][2]);
-    //        glVertex3f(sole[i+1][0],
-    //                   sole[i+1][1],
-    //                   sole[i+1][2]);
-    //    }
-    //    last = heelCount - 1;
-    //    for (i = 0; i < last; ++i)
-    //    {
-    //        glVertex3f(heel[i][0],
-    //                   heel[i][1],
-    //                   heel[i][2]);
-    //        glVertex3f(heel[i+1][0],
-    //                   heel[i+1][1],
-    //                   heel[i+1][2]);
-    //    }
-    //    glEnd();
     
 //    glPushAttrib(GL_CURRENT_BIT);
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//    glDepthMask(GL_FALSE);
+    //    glEnable(GL_BLEND);
+    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //    glDepthMask(GL_FALSE);
     
-    //MColor solidColour, wireColour;
-    
-    //DrawReflection(m_srcPoint, m_destPoint);
-    DrawDisc(1.0f, 32, false);
-    //DrawCube(1, 1, 1, glFloat3(0.0, 0.0, 0.0), glFloat4(0.0, 0.0, 0.0, 0.0f), 255, 0, 0, false);
-    //DrawCube(glFloat3(0.0, 0.0, 0.0), glFloat4(0.0, 0.0, 0.0, 0.0f), 255, 0, 0, false);
-    
-//    glDepthMask(GL_TRUE);
-//    glDisable(GL_BLEND);
+        //MColor solidColour, wireColour;
+        
+        //DrawReflection(m_srcPoint, m_destPoint);
+        DrawDisc(1.0f, 32, false);
+        
+    //    glDepthMask(GL_TRUE);
+    //    glDisable(GL_BLEND);
 //    glPopAttrib();
 }
 
@@ -206,27 +153,4 @@ void CreateShapesDrawAgentGL::DrawDisc(float radius, int divisions, bool filled)
         glVertex3f(points[i].x, 0.0f, points[i].z);
     }
     glEnd();
-}
-
-//void CreateShapesDrawAgentGL::DrawCube(GLfloat width, GLfloat height, GLfloat depth, glFloat3 position, glFloat4 rotation, GLubyte r, GLubyte g, GLubyte b, bool filled)
-void CreateShapesDrawAgentGL::DrawCube(glFloat3 position, glFloat4 rotation, GLubyte r, GLubyte g, GLubyte b, bool filled)
-{
-//    int renderState = filled ? GL_TRIANGLES : GL_LINE_STRIP;
-//    
-//    if (filled)
-//    {
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
-//    }
-//    else
-//    {
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE_STRIP);
-//    }
-//    glBegin(renderState);
-//        int last = cubeVertsCount - 1;
-//        for (int i = 0; i < last; ++i)
-//        {
-//            //glNormal3f(0.0f, 1.0f, 0.0f);
-//            glVertex3f(cubeVertices[i][0], cubeVertices[i][1], cubeVertices[i][2]);
-//        }
-//    glEnd();
 }

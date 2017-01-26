@@ -55,30 +55,6 @@ struct glFloat3
     };
 };
 
-struct glFloat4
-{
-    GLfloat angle;
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
-    
-    glFloat4()
-    {
-        angle = 0.0f;
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
-    }
-    
-    glFloat4(GLfloat _angle, GLfloat _x, GLfloat _y, GLfloat _z)
-    {
-        angle = _angle;
-        x = _x;
-        y = _y;
-        z = _z;
-    }
-};
-
 static float bbData[][3] =
 {
     { -0.18f, 0.f, -0.71f},

@@ -76,10 +76,12 @@ private:
     const MHWRender::MBlendState* mBlendState;
 
     MPointArray totalVerts;
-
     unsigned int numTotalVerts;
 
     bool drawShapes = true;
+    
+    MPoint textPos = MPoint(0.0, 0.0, 0.0);
+    MColor textColor = MColor(0.1f, 0.8f, 0.8f, 1.0f);
 };
 
 #endif 
