@@ -237,18 +237,18 @@ void CreateShapesDrawOverride::addUIDrawables(const MDagPath& objPath, MHWRender
     
     if(drawShapes)
     {
-        shape.GenerateCubes(10, 1.0f, 0.0f, 0.0f);
-        shape.GenerateCylinders(2, 0.0f, 0.0f, 1.0f);
-        shape.GenerateCapsules(3, 0.0f, 3.0f, 0.0f);
+        shape.GenerateCubes(10, glFloat3(0.0f, 0.0f, 0.0f), glFloat3(1.0f, 5.0f, 2.0f));
+        shape.GenerateCylinders(2, glFloat3(7.0f, 0.0f, 3.0f), glFloat3(0.0f, 0.0f, 1.0f));
+        shape.GenerateCapsules(3, glFloat3(0.0f, 3.0f, 0.0f), glFloat3(0.0f, 3.0f, 0.0f));
     
         drawShapes = false;
     }
 
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCubeVertices() , NULL, NULL, shape.GetCubeIndices(), NULL);
     drawManager.setColor(MColor(1.0f, 0.0f, 0.0f, 1.0f));
-    //drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCylinderVertices(), NULL, NULL, shape.GetCylinderIndices(), NULL);
+    drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCylinderVertices(), NULL, NULL, shape.GetCylinderIndices(), NULL);
     drawManager.setColor(MColor(0.0f, 1.0f, 0.0f, 1.0f));
-    //drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCapsuleVertices(), NULL, NULL, shape.GetCapsuleIndices(), NULL);
+    drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCapsuleVertices(), NULL, NULL, shape.GetCapsuleIndices(), NULL);
     
     drawManager.setColor(textColor);
     drawManager.setFontSize(MHWRender::MUIDrawManager::kSmallFontSize);

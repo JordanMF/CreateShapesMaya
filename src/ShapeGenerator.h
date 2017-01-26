@@ -14,9 +14,9 @@
 class ShapeGenerator
 {
 public:
-    ShapeData GenerateCubes(int numCubes, float distX, float distY, float distZ);
-    ShapeData GenerateCylinders(int numCylinders, float distX, float distY, float distZ);
-    ShapeData GenerateCapsules(int numCapsules, float distX, float distY, float distZ);
+    ShapeData GenerateCubes(int numCubes, glFloat3 pos, glFloat3 offsetPos);
+    ShapeData GenerateCylinders(int numCylinders, glFloat3 pos, glFloat3 offsetPos);
+    ShapeData GenerateCapsules(int numCapsules, glFloat3 pos, glFloat3 offsetPos);
     
     void AddCubeVertex(double x, double y, double z, double w);
     void AddCylinderVertex(double x, double y, double z, double w);

@@ -28,10 +28,10 @@
 
 struct glFloat3
 {
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
-    
+    float x;
+    float y;
+    float z;
+
     glFloat3()
     {
         x = 0.0f;
@@ -39,7 +39,7 @@ struct glFloat3
         z = 0.0f;
     }
     
-    glFloat3(GLfloat _x, GLfloat _y, GLfloat _z)
+    glFloat3(float _x, float _y, float _z)
     {
         x = _x;
         y = _y;
