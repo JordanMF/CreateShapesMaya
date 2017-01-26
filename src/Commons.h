@@ -11,8 +11,8 @@
 
 #if defined (_WIN32)
     #if defined (_WIN64)
-#include <windows.h>
-#include <GL/gl.h>
+        #include <windows.h>
+        #include <GL/gl.h>
     #endif
 #endif
 
