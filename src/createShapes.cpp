@@ -45,7 +45,6 @@ MStatus CreateShapes::Initialize()
     MFnNumericAttribute numAttr;
     MFnCompoundAttribute compAttr;
     
-    //size = numAttr.create("size", "sz", MFnNumericData::k3Float);
     
     size = unitAttr.create("size", "sx", MFnUnitAttribute::kDistance);
     unitAttr.setDefault(1.0);
@@ -57,26 +56,6 @@ MStatus CreateShapes::Initialize()
     }
     // Add dependency on the localScale attribute, so that when size is modified CreateShapesDrawOverride::transform will get called
     attributeAffects(CreateShapes::size, MPxLocatorNode::localScale);
-    
-//    sizeX = unitAttr.create("sizeX", "sX", MFnUnitAttribute::kDistance);
-//    unitAttr.setDefault(1.0);
-//    status = addAttribute(sizeX);
-//    if (!status)
-//    {
-//        status.perror("addAttribute");
-//        return status;
-//    }
-//    // Add dependency on the localScale attribute, so that when size is modified CreateShapesDrawOverride::transform will get called
-//    attributeAffects(CreateShapes::sizeX, MPxLocatorNode::localScaleX);
-    
-    colorR = numAttr.createColor("color", "cR");
-    addAttribute(colorR);
-    if (!status)
-    {
-        status.perror("addAttribute");
-        return status;
-    }
-    attributeAffects(CreateShapes::colorR, CreateShapes::color);
     
     color = numAttr.createColor("color", "c");
     addAttribute(color);

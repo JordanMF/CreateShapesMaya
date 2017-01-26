@@ -66,27 +66,6 @@ float CreateShapesDrawOverride::getMultiplier(const MDagPath& objPath) const
     return 1.0f;
 }
 
-//float CreateShapesDrawOverride::getMultiplierX(const MDagPath& objPath) const
-//{
-//    // Retrieve value of) the size attribute from the node
-//    MStatus status;
-//    MObject CreateShapesNode = objPath.node(&status);
-//    if) (status)
-//    {
-//        MPlug plug(CreateShapesNode, CreateShapes::sizeX);
-//        if) (!plug.isNull())
-//        {
-//            MDistance sizeXVal;
-//            if) (plug.getValue(sizeXVal))
-//            {
-//                return (float)sizeXVal.asCentimeters();
-//            }
-//        }
-//    }
-//    
-//    return 1.0f;
-//}
-
 bool CreateShapesDrawOverride::isTransparentSort(const MDagPath& objPath) const
 {
     MStatus status;
@@ -105,25 +84,6 @@ bool CreateShapesDrawOverride::isTransparentSort(const MDagPath& objPath) const
     }
     
     return false;
-}
-
-MColor CreateShapesDrawOverride::getColor(const MDagPath &objPath) const
-{
-    MStatus status;
-    MObject CreateShapesNode = objPath.node(&status);
-    if (status)
-    {
-        MPlug plug(CreateShapesNode, CreateShapes::color);
-        if (!plug.isNull())
-        {
-            MColor aColor;
-            plug.getValue(CreateShapesNode);
-            MFnNumericData val(CreateShapesNode);
-            val.getData(aColor.r, aColor.g, aColor.b);
-            
-            return aColor;
-        }
-    }
 }
 
 float CreateShapesDrawOverride::getTransparency(const MDagPath& objPath) const
@@ -225,30 +185,10 @@ MUserData* CreateShapesDrawOverride::prepareForDraw(const MDagPath& objPath, con
     if ((displayStatus == MHWRender::kLead) || (displayStatus == MHWRender::kActive) || (displayStatus == MHWRender::kHilite) || (displayStatus == MHWRender::kActiveComponent))
     {
         MColor color = MHWRender::MGeometryUtilities::wireframeColor(objPath);
-//        data->fColor[0] = color.r;
-//        data->fColor[1] = color.g;
-//        data->fColor[2] = color.b;
         
-        float colorR = MFnDependencyNode(fCreateShapes).findPlug("CreateShapes::color.r").asFloat();
-        float colorG = MFnDependencyNode(fCreateShapes).findPlug("CreateShapes::color.g").asFloat();
-        float colorB = MFnDependencyNode(fCreateShapes).findPlug("CreateShapes::color.b").asFloat();
-        
-        //MColor getColor = MColor(colorR, colorG, colorB);
-        
-        //data->fColor = drawAgentPtr->setColor(getColor);
-        
-        data->fColor[0] = colorR;
-        data->fColor[1] = colorG;
-        data->fColor[2] = colorB;
-        
-//        data->fColor[0] = 1.0f;
-//        data->fColor[1] = 0.0f;
-//        data->fColor[2] = 0.0f;
-        
-        //data->fColor[0] = getColor(objPath).r;
-        //data->fColor[1] = getColor(objPath).g;
-        //data->fColor[2] = getColor(objPath).b;
-        
+        data->fColor[0] = 1.0f;
+        data->fColor[1] = 0.0f;
+        data->fColor[2] = 0.0f;
     }
     else
     {
@@ -294,108 +234,30 @@ MUserData* CreateShapesDrawOverride::prepareForDraw(const MDagPath& objPath, con
 void CreateShapesDrawOverride::addUIDrawables(const MDagPath& objPath, MHWRender::MUIDrawManager& drawManager, const MHWRender::MFrameContext& frameContext, const MUserData* data)
 {
     // Draw text
-    MPoint pos( 0.0, 0.0, 0.0 ); // Position of) the text
-    MColor textColor( 0.1f, 0.8f, 0.8f, 1.0f); // Text color
+    MPoint textPos(0.0, 0.0, 0.0);
+    MColor textColor(0.1f, 0.8f, 0.8f, 1.0f);
+    MColor meshColor(1.0f, 0.0f, 0.0f, 1.0f);
     
     drawManager.beginDrawable();
     
-    float cubePositions[][4] =
+    if(drawShapes)
     {
-        // 0,1,2
-        { -1.0f,  1.0f, -1.0f, 1.0f },
-        { 1.0f,  1.0f, -1.0f, 1.0f },
-        { 1.0f, -1.0f, -1.0f, 1.0f},
-        // 2,3,0
-        { 1.0f, -1.0f, -1.0f, 1.0f },
-        { -1.0f, -1.0f, -1.0f, 1.0f },
-        { -1.0f,  1.0f, -1.0f, 1.0f },
-        
-        //0,3,4
-        { -1.0f,  1.0f, -1.0f, 1.0f },
-        { -1.0f, -1.0f, -1.0f, 1.0f },
-        { -1.0f, -1.0f,  1.0f, 1.0f },
-        //4,5,0
-        { -1.0f, -1.0f,  1.0f, 1.0f },
-        { -1.0f,  1.0f,  1.0f, 1.0f },
-        { -1.0f,  1.0f, -1.0f, 1.0f },
-        
-        //
-        { -1.0f,  1.0f, -1.0f, 1.0f },
-        { -1.0f,  1.0f,  1.0f, 1.0f },
-        {  1.0f,  1.0f,  1.0f, 1.0f },
-        //
-        {  1.0f,  1.0f,  1.0f, 1.0f },
-        {  1.0f,  1.0f, -1.0f, 1.0f},
-        { -1.0f,  1.0f, -1.0f, 1.0f },
-
-        //
-        {  1.0f,  1.0f, -1.0f, 1.0f },
-        {  1.0f,  1.0f,  1.0f, 1.0f },
-        {  1.0f, -1.0f,  1.0f, 1.0f },
-        //
-        { 1.0f, -1.0f,  1.0f, 1.0f },
-        { 1.0f, -1.0f, -1.0f, 1.0f },
-        { 1.0f,  1.0f, -1.0f, 1.0f },
-        
-        //
-        {  1.0f, -1.0f,  1.0f, 1.0f },
-        { -1.0f, -1.0f,  1.0f, 1.0f },
-        { -1.0f, -1.0f, -1.0f, 1.0f },
-        //
-        { -1.0f, -1.0f, -1.0f, 1.0f},
-        {  1.0f, -1.0f, -1.0f, 1.0f },
-        {  1.0f, -1.0f,  1.0f, 1.0f },
-
-        //
-        { -1.0f, -1.0f,  1.0f, 1.0f},
-        {  1.0f, -1.0f,  1.0f, 1.0f },
-        {  1.0f,  1.0f,  1.0f, 1.0f },
-        //
-        {  1.0f, 1.0f,  1.0f, 1.0f },
-        { -1.0f, 1.0f,  1.0f, 1.0f },
-        { -1.0f, -1.0f, 1.0f, 1.0f },
-    };
+        shape.GenerateCubes(10, 1.0f, 0.0f, 0.0f);
+        shape.GenerateCylinders(2, 0.0f, 0.0f, 1.0f);
+        shape.GenerateCapsules(3, 0.0f, 3.0f, 0.0f);
     
-     unsigned int cubeIndices[] =
-    {
-        0,1,2,
-        2,3,0,
-        
-        0,3,4,
-        4,5,0,
-        
-        0,5,6,
-        6,1,0,
-        
-        1,6,7,
-        7,2,1,
-        
-        7,4,3,
-        3,2,7,
-        
-        4,7,6,
-        6,5,4
-    };
-    
-    MPointArray cubePoints(cubePositions, (sizeof(cubePositions)/sizeof(*cubePositions)));
-    MUintArray cubeInt(cubeIndices, 36);
-    
-    for(int i = 0; i < 300; i++)
-    {
-        for(int k = 0; k < 300; k++)
-        {
-            for(int j = 0; j < (sizeof(cubePositions)/sizeof(*cubePositions)); j++)
-            {
-                cubePoints.append((cubePositions[j][0] + (3 * i)), cubePositions[j][1], cubePositions[j][2] + (3 * k), 1);
-            }
-        }
+        drawShapes = false;
     }
-    
-    drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, cubePoints, NULL, NULL, NULL, NULL);
+
+    drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCubeVertices() , NULL, NULL, shape.GetCubeIndices(), NULL);
+    drawManager.setColor(meshColor);
+    //drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCylinderVertices(), NULL, NULL, shape.GetCylinderIndices(), NULL);
+    drawManager.setColor(MColor(0.0f, 1.0f, 0.0f, 1.0f));
+    //drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCapsuleVertices(), NULL, NULL, shape.GetCapsuleIndices(), NULL);
     
     drawManager.setColor(textColor);
-    drawManager.setFontSize( MHWRender::MUIDrawManager::kSmallFontSize);
-    drawManager.text(pos, MString("A Cube"), MHWRender::MUIDrawManager::kCenter);
+    drawManager.setFontSize(MHWRender::MUIDrawManager::kSmallFontSize);
+    drawManager.text(textPos, MString("Some Text"), MHWRender::MUIDrawManager::kCenter);
     
     drawManager.endDrawable();
 }

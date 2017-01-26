@@ -28,12 +28,6 @@ public:
         // Get  world view projection matrix
         MStatus status;
         
-        mWorldMatrix = context.getMatrix(MHWRender::MFrameContext::kWorldMtx, &status);
-        mModelWorldMatrix = context.getMatrix(MHWRender::MFrameContext::kWorldInverseMtx, &status);
-        mViewMatrix = context.getMatrix(MHWRender::MFrameContext::kViewMtx, &status);
-        mProjMatrix = context.getMatrix(MHWRender::MFrameContext::kProjectionMtx, &status);
-        mViewProjMatrix = context.getMatrix(MHWRender::MFrameContext::kViewProjMtx, &status);
-        
         mWorldViewProjMatrix = context.getMatrix(MHWRender::MFrameContext::kWorldViewProjMtx, &status);
     }
     
@@ -43,34 +37,13 @@ private:
     GLint mWVPIndex;
     GLint mColorIndex;
     GLint mVtxAttrib;
-    GLint mPos;
-    
-    ShapeData cube = ShapeGenerator::GenerateCube();
     
     GLuint mBBoxVAO;
-    GLuint mCubeWireframeVAO;
-    GLuint mCubeShadedVAO;
     
     GLuint mBoundingboxVertexBuffer;
     GLuint mBoundingboxIndexBuffer;
-    GLuint mCubeVertexBuffer;
-    GLuint mCubeWireIndexBuffer;
-    GLuint mCubeShadedIndexBuffer;
-    
-    MMatrix mWorldMatrix;
-    MMatrix mModelWorldMatrix;
-    MMatrix mViewMatrix;
-    MMatrix mProjMatrix;
-    MMatrix mViewProjMatrix;
+
     MMatrix mWorldViewProjMatrix;
-    
-    glm::mat4 world;
-    glm::mat4 modelWorld;
-    glm::mat4 worldToProj;
-    glm::mat4 worldToView;
-    glm::mat4 proj;
-    glm::mat4 viewProj;
-    
     
     bool mInitialized;
     bool mValid;
@@ -84,17 +57,11 @@ private:
     , mWVPIndex(0)
     , mColorIndex(0)
     , mVtxAttrib(0)
-    , mPos(0)
     // VAOs
     , mBBoxVAO(0)
-    , mCubeWireframeVAO(0)
-    , mCubeShadedVAO(0)
     // Draw buffers
     , mBoundingboxVertexBuffer(0)
     , mBoundingboxIndexBuffer(0)
-    , mCubeVertexBuffer(0)
-    , mCubeWireIndexBuffer(0)
-    , mCubeShadedIndexBuffer(0)
     , mInitialized(false)
     , mValid(false)
     {}

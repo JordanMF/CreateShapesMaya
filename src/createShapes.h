@@ -43,8 +43,6 @@ public:
     virtual bool IsTransparent() const;
     virtual MBoundingBox BoundingBox() const;
     
-    //void setcolorR(float col);
-    
     static MObject size;                // The size of the foot
     static MObject sizeX;
     static MObject sizeY;
@@ -61,9 +59,6 @@ public:
     
     static MString drawDbClassification;
     static MString drawRegistrantId;
-    
-//private:
-    //MPoint m_srcPoint, m_destPoint, m_planePoint;
 
 };
 

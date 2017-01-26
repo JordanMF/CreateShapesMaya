@@ -50,78 +50,15 @@ void CreateShapesDrawAgentCoreProfile::setupUniforms()
 {
     if(mShaderOverride == NULL)
     {
-        //glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
-//        for(int l = 0; l < 1000; l++)
-//        {
-//            pos += glm::vec3(1.0f, 0.0f, 0.0f);
-//        }
-        
-        glm::mat4 cubeWorldMatrix;
-        glm::mat4 wvp;
-        
-        for (size_t i = 0; i < 4; ++i)
-            for (size_t j = 0; j < 4; ++j)
-            {
-                world[i][j] = (float)mWorldMatrix.matrix[i][j];
-                modelWorld[i][j] = (float)mModelWorldMatrix[i][j];
-                worldToView[i][j] = (float)mViewMatrix.matrix[i][j];
-                proj[i][j] = (float)mProjMatrix.matrix[i][j];
-                viewProj[i][j] = (float)mViewProjMatrix.matrix[i][j];
-                
-                wvp[i][j] = mWorldViewProjMatrix.matrix[i][j];
-            }
-//
-//        worldToProj = world * viewProj;
-        //SetCubeInfo(cubeWorldMatrix, pos, 0.0f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 1.0f, 1.0f));
-        
-        //mFullTransform = proj * mModelTransform;
-        //wvp = mFullTransform * world;
-        
-//        cubeWorldMatrix = glm::translate(world, pos);
-//        cubeWorldMatrix = glm::rotate(world, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-        
-        //cubeWorldMatrix = proj * mTranslation * mRotation;
-        
-//        for(int k = 0; k < 20; k++)
-//        {
-//            pos = glm::vec3(pos.x + 1.0f, 0.0f, 0.0f);
-//            mFullTransform = glm::translate(mFullTransform, pos);
-//            //cout << pos.x << pos.y << pos.z << endl;
-//        }
-        
         glm::mat4 fMatrix;
         for (size_t i = 0; i < 4; ++i)
             for (size_t j = 0; j < 4; ++j)
             {
-                //fMatrix[i][j] = mFullTransform[i][j];
-                
-                //fMatrix[i][j] = wvp[i][j];
                 fMatrix[i][j] = (float)mWorldViewProjMatrix.matrix[i][j];
-                
             }
         
-//        for(int l = 0; l < 1000; l++)
-//        {
-//            pos.x = pos.x + 1.0f;
-//        }
-        
-//        fMatrix = glm::translate(fMatrix, pos);
-//        fMatrix = glm::rotate(fMatrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-//        fMatrix = glm::scale(fMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-//
         GLCP::UniformMatrix4fv(mWVPIndex, 1, GL_FALSE, glm::value_ptr(fMatrix));
         GLCP::Uniform4f(mColorIndex, mColor.r, mColor.g, mColor.b, mColor.a);
-        
-//        glm::vec3 pos1 = glm::vec3(0.0f, 0.0f, 0.0f);
-//        
-//        SetCubeInfo(cubeWorldMatrix, pos, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-//        
-//        fMatrix = glm::translate(fMatrix, pos1);
-//        fMatrix = glm::rotate(fMatrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-//        fMatrix = glm::scale(fMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-//        
-//        GLCP::UniformMatrix4fv(mWVPIndex, 1, GL_FALSE, glm::value_ptr(fMatrix));
-//        GLCP::Uniform4f(mColorIndex, mColor.r, mColor.g, mColor.b, mColor.a);
     }
 }
 
@@ -132,11 +69,6 @@ void CreateShapesDrawAgentCoreProfile::drawShaded()
     
     // Set uniforms
     setupUniforms();
-    
-    GLCP::BindVertexArray(mCubeShadedVAO);
-    //glDrawElements(GL_TRIANGLES, 3 * (cube.numVertices - 2), GL_UNSIGNED_SHORT, 0);
-    //glDrawArrays(GL_TRIANGLES, 0, cubeVertsCount);
-    //glDrawArrays(GL_TRIANGLES, 0, cube.numVertices);
 }
 
 void CreateShapesDrawAgentCoreProfile::drawBoundingBox()
@@ -148,7 +80,7 @@ void CreateShapesDrawAgentCoreProfile::drawBoundingBox()
     setupUniforms();
     
     GLCP::BindVertexArray(mBBoxVAO);
-    //glDrawElements(GL_LINES, 2 * 12, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_LINES, 2 * 12, GL_UNSIGNED_SHORT, 0);
 }
 
 void CreateShapesDrawAgentCoreProfile::drawWireframe()
@@ -158,19 +90,6 @@ void CreateShapesDrawAgentCoreProfile::drawWireframe()
  
     // Set uniforms
     setupUniforms();
-    
-//    GLCP::BindVertexArray(mSoleWireframeVAO);
-//    glDrawElements(GL_LINES, 2 * (soleCount-1), GL_UNSIGNED_SHORT, 0);
-//    GLCP::BindVertexArray(mHeelWireframeVAO);
-//    glDrawElements(GL_LINES, 2 * (heelCount-1), GL_UNSIGNED_SHORT, 0);
-    
-    GLCP::BindVertexArray(mCubeWireframeVAO);
-    //glDrawElements(GL_LINES, 2 * (cube.numVertices), GL_UNSIGNED_SHORT, 0);
-    //glDrawArrays(GL_LINE_STRIP, 0, cubeVertsCount);
-    //glDrawArrays(GL_LINE_STRIP, 0, cube.numVertices);
-    //glDrawArrays(GL_LINE_STRIP, 0, cube.numVertices);
-    
-    cout << cube.numVertices;
 }
 
 bool CreateShapesDrawAgentCoreProfile::initShadersCoreProfile()
@@ -245,8 +164,7 @@ bool CreateShapesDrawAgentCoreProfile::initShadersCoreProfile()
     mWVPIndex = GLCP::GetUniformLocation(mShaderProgram, "MVP");
     mColorIndex = GLCP::GetUniformLocation(mShaderProgram, "color");
     mVtxAttrib = GLCP::GetAttribLocation( mShaderProgram, "Pm" );
-    mPos = GLCP::GetUniformLocation(mShaderProgram, "mFullTransform");
-    
+
     GLCP::DeleteShader(vertexShaderID);
     GLCP::DeleteShader(fragmentShaderID);
     
@@ -270,52 +188,9 @@ bool CreateShapesDrawAgentCoreProfile::initBuffersCoreProfile()
     GLCP::VertexAttribPointer(mVtxAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
     GLCP::BindVertexArray(0);
     
-//    GLCP::GenBuffers(1, &mCubeVertexBuffer);
-//    GLCP::BindBuffer(GL_ARRAY_BUFFER, mCubeVertexBuffer);
-//    GLCP::BufferData(GL_ARRAY_BUFFER, cube.vertexBufferSize(), (void*)cube.vertices, GL_STATIC_DRAW);
-    
-    GLCP::GenBuffers(1, &mCubeVertexBuffer);
-    GLCP::BindBuffer(GL_ARRAY_BUFFER, mCubeVertexBuffer);
-    GLCP::BufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), (void*)cubeVertices, GL_STATIC_DRAW);
-    
-    GLCP::GenBuffers(1, &mCubeWireIndexBuffer);
-    GLCP::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mCubeWireIndexBuffer);
-    GLCP::BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(wireIndices), (void*)wireIndices, GL_STATIC_DRAW);
-    
-//    GLCP::GenBuffers(1, &mCubeWireIndexBuffer);
-//    GLCP::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mCubeWireIndexBuffer);
-//    GLCP::BufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indexBufferSize(), (void*)cube.indices, GL_STATIC_DRAW);
-    
-    GLCP::GenBuffers(1, &mCubeShadedIndexBuffer);
-    GLCP::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mCubeShadedIndexBuffer);
-    GLCP::BufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indexBufferSize(), (void*)cube.indices, GL_STATIC_DRAW);
-    
-//    GLCP::GenBuffers(1, &mCubeShadedIndexBuffer);
-//    GLCP::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mCubeShadedIndexBuffer);
-//    GLCP::BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), (void*)indices, GL_STATIC_DRAW);
-    
     GLCP::UseProgram(mShaderProgram);
     
     // Setup ALL VAO Combinations here for further usage:
-    GLCP::GenVertexArrays(1, &mCubeWireframeVAO);
-    GLCP::BindVertexArray(mCubeWireframeVAO);
-    GLCP::BindBuffer(GL_ARRAY_BUFFER, mCubeVertexBuffer);
-    GLCP::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mCubeWireIndexBuffer);
-    GLCP::EnableVertexAttribArray(mVtxAttrib);
-    GLCP::VertexAttribPointer(mVtxAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    GLCP::BindVertexArray(0);
-    
-    for(int i = 0; i < 1000; i++)
-    {
-        GLCP::GenVertexArrays(1, &mCubeShadedVAO);
-        GLCP::BindVertexArray(mCubeShadedVAO);
-        GLCP::BindBuffer(GL_ARRAY_BUFFER, mCubeVertexBuffer);
-        GLCP::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mCubeShadedIndexBuffer);
-        GLCP::EnableVertexAttribArray(mVtxAttrib);
-        GLCP::VertexAttribPointer(mVtxAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        GLCP::BindVertexArray(0);
-    }
-    
     GLCP::UseProgram(0);
     GLCP::BindBuffer(GL_ARRAY_BUFFER, 0);
     GLCP::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -337,18 +212,6 @@ bool CreateShapesDrawAgentCoreProfile::releaseCoreProfileResources()
         mBBoxVAO = 0;
     }
     
-    if (mCubeWireframeVAO)
-    {
-        GLCP::DeleteVertexArrays(1, &mCubeWireframeVAO);
-        mCubeWireframeVAO = 0;
-    }
-    
-    if (mCubeShadedVAO)
-    {
-        GLCP::DeleteVertexArrays(1, &mCubeShadedVAO);
-        mCubeShadedVAO = 0;
-    }
-    
     if (mBoundingboxVertexBuffer)
     {
         GLCP::DeleteBuffers(1, &mBoundingboxVertexBuffer);
@@ -359,24 +222,6 @@ bool CreateShapesDrawAgentCoreProfile::releaseCoreProfileResources()
     {
         GLCP::DeleteBuffers(1, &mBoundingboxIndexBuffer);
         mBoundingboxIndexBuffer = 0;
-    }
-    
-    if (mCubeVertexBuffer)
-    {
-        GLCP::DeleteBuffers(1, &mCubeVertexBuffer);
-        mCubeVertexBuffer = 0;
-    }
-    
-    if (mCubeWireIndexBuffer)
-    {
-        GLCP::DeleteBuffers(1, &mCubeWireIndexBuffer);
-        mCubeWireIndexBuffer = 0;
-    }
-    
-    if (mCubeShadedIndexBuffer)
-    {
-        GLCP::DeleteBuffers(1, &mCubeShadedIndexBuffer);
-        mCubeShadedIndexBuffer = 0;
     }
     
     return true;

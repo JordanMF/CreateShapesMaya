@@ -12,6 +12,7 @@
 #include "createShapes.h"
 #include "createShapesDrawAgentGL.h"
 #include "createShapesDrawAgentCoreProfile.h"
+#include "ShapeGenerator.h"
 #include <assert.h>
 
 class CreateShapesDrawOverride : public MHWRender::MPxDrawOverride
@@ -45,7 +46,13 @@ public:
     bool excludedFromPostEffects() const override;
     bool isTransparent() const override;
     
-    MColor getColor(const MDagPath& objPath) const;
+    void FillCube(double x, double y, double z, double w);
+    void FillCylinder(double x, double y, double z, double w);
+    void FillCapsule(double x, double y, double z, double w);
+    
+    void SetCylinderIndices();
+    
+    ShapeGenerator shape;
     
 protected:
     MBoundingBox mCurrentBoundingBox;
@@ -57,7 +64,6 @@ protected:
 private:
     CreateShapesDrawOverride(const MObject& obj);
     float getMultiplier(const MDagPath& objPath) const;
-    //float getMultiplierX(const MDagPath& objPath) const;
     
     bool isTransparentSort(const MDagPath& objPath) const;
     float getTransparency(const MDagPath& objPath) const;
@@ -68,6 +74,12 @@ private:
     MObject fCreateShapes;
     
     const MHWRender::MBlendState* mBlendState;
+
+    MPointArray totalVerts;
+
+    unsigned int numTotalVerts;
+
+    bool drawShapes = true;
 };
 
 #endif 
