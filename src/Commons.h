@@ -9,25 +9,22 @@
 #ifndef Commons_h
 #define Commons_h
 
-#if defined (_WIN32)
-    #if defined (_WIN64)
-        #include <windows.h>
-        #include <GL/gl.h>
-    #endif
+#if defined (_WIN32) || defined (_WIN64)
+    #include <windows.h>
+    #include <GL/gl.h>
+#elif defined (OSMac_)
+    #include <OpenGL/gl.h>
 #endif
-
-#include <OpenGL/gl.h>
-#include <math.h>
-#include <iostream>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include <math.h>
+#include <iostream>
+
 #include <maya/MUintArray.h>
 #include <maya/MPointArray.h>
-
-#define ARRLENGTH 36
 
 struct glFloat3
 {
@@ -109,12 +106,6 @@ static unsigned short bbWireIndices[] =
     1,5,
     2,6,
     3,7
-};
-
-struct Vertex
-{
-    float x, y, z;
-    
 };
 
 struct ShapeData
