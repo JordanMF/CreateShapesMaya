@@ -1,6 +1,6 @@
 //
 //  createShapesDrawOverride.h
-//  createShapes
+//  CreateShapes
 //
 //  Created by Jordan Issa on 10/01/2017.
 //
@@ -14,6 +14,7 @@
 #include "createShapesDrawAgentCoreProfile.h"
 #include "ShapeGenerator.h"
 #include <assert.h>
+#include <random>
 
 class CreateShapesDrawOverride : public MHWRender::MPxDrawOverride
 {

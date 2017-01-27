@@ -1,6 +1,6 @@
 //
-//  Header.h
-//  ReflectionLocator
+//  ShapeGenerator.h
+//  CreateShapes
 //
 //  Created by Jordan Issa on 19/01/2017.
 //
@@ -10,13 +10,18 @@
 #define ShapeGenerator_h
 
 #include "Commons.h"
+#include <random>
+
+#include <maya/MPxTransform.h>
+#include <maya/MPxTransformationMatrix.h>
+#include <maya/MTransformationMatrix.h>
 
 class ShapeGenerator
 {
 public:
-    ShapeData GenerateCubes(int numCubes, glFloat3 pos, glFloat3 offsetPos);
-    ShapeData GenerateCylinders(int numCylinders, glFloat3 pos, glFloat3 offsetPos);
-    ShapeData GenerateCapsules(int numCapsules, glFloat3 pos, glFloat3 offsetPos);
+    ShapeData GenerateCubes(int numCubes, glFloat3 initialPos, glFloat3 scale);
+    ShapeData GenerateCylinders(int numCylinders, glFloat3 initialPos);
+    ShapeData GenerateCapsules(int numCapsules, glFloat3 initialPos);
     
     void AddCubeVertex(double x, double y, double z, double w);
     void AddCylinderVertex(double x, double y, double z, double w);

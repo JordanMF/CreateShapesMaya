@@ -1,6 +1,6 @@
 //
 //  ShapeData.cpp
-//  ReflectionLocator
+//  CreateShapes
 //
 //  Created by Jordan Issa on 19/01/2017.
 //
@@ -8,24 +8,36 @@
 
 #include "ShapeGenerator.h"
 
-#define NUM_ARRAY_ELEMENTS(a) sizeof(a) / sizeof(*a);
-
-ShapeData ShapeGenerator::GenerateCubes(int numCubes, glFloat3 pos, glFloat3 offsetPos)
-{    
+ShapeData ShapeGenerator::GenerateCubes(int numCubes, glFloat3 initialPos, glFloat3 scale)
+{
+    MTransformationMatrix matrix;
+    
+    MVector positionX = MVector(initialPos.x, 0.0f, 0.0f);
+    MVector positionY = MVector(initialPos.y, 0.0f, 0.0f);
+    MVector positionZ = MVector(initialPos.z, 0.0f, 0.0f);
+    
     if(addedInitialCube == false)
     {
-        AddCubeVertex(-0.5f + pos.x, -0.5f + pos.y, 0.5 + pos.z, 1.0f);
-        AddCubeVertex(0.5f + pos.x, -0.5f + pos.y, 0.5 + pos.z, 1.0f);
-        AddCubeVertex(-0.5f + pos.x, 0.5f + pos.y, 0.5 + pos.z, 1.0f);
-        AddCubeVertex(0.5f + pos.x, 0.5f + pos.y, 0.5 + pos.z, 1.0f);
-        AddCubeVertex(-0.5f + pos.x, 0.5f + pos.y, -0.5 + pos.z, 1.0f);
-        AddCubeVertex(0.5f + pos.x, 0.5f + pos.y, -0.5 + pos.z, 1.0f);
-        AddCubeVertex(-0.5f + pos.x, -0.5f + pos.y, -0.5 + pos.z, 1.0f);
-        AddCubeVertex(0.5f + pos.x, -0.5f + pos.y, -0.5 + pos.z, 1.0f);
-        AddCubeVertex(0.5f + pos.x, -0.5f + pos.y, 0.5 + pos.z, 1.0f);
-        AddCubeVertex(0.5f + pos.x, -0.5f + pos.y, -0.5 + pos.z, 1.0f);
-        AddCubeVertex(-0.5f + pos.x, -0.5f + pos.y, -0.5 + pos.z, 1.0f);
-        AddCubeVertex(-0.5f + pos.x, -0.5f + pos.y, 0.5 + pos.z, 1.0f);
+        matrix.addTranslation(positionX, MSpace::kTransform);
+        matrix.addTranslation(positionY, MSpace::kTransform);
+        matrix.addTranslation(positionZ, MSpace::kTransform);
+        
+        MQuaternion q;
+        
+        matrix.rotateBy(q, MSpace::kTransform);
+        
+        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
+        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
     }
     
         unsigned int cubeIndices[] =
@@ -54,49 +66,19 @@ ShapeData ShapeGenerator::GenerateCubes(int numCubes, glFloat3 pos, glFloat3 off
     
     addedInitialCube = true;
     
-    if(offsetPos.x <= 1.5f)
-    {
-        if(offsetPos.x != 0.0f)
-        {
-            offsetPos.x = 1.5f;
-        }
-        else
-        {
-            offsetPos.x = 0.0f;
-        }
-    }
-    if(offsetPos.y <= 1.5f)
-    {
-        if(offsetPos.y != 0.0f)
-        {
-            offsetPos.y = 1.5f;
-        }
-        else
-        {
-            offsetPos.y = 0.0f;
-        }
-    }
-    if(offsetPos.z <= 1.5f)
-    {
-        if(offsetPos.z != 0.0f)
-        {
-            offsetPos.z = 1.5f;
-        }
-        else
-        {
-            offsetPos.z = 0.0f;
-        }
-    }
-    
     if(addedInitialCube)
     {
         if(numCubes > 1)
         {
             for(int i = 1; i < numCubes; i++)
-            {                
+            {
                 for(int j = 0; j < cubeRet.numVertices; j++)
                 {
-                    cubeRet.vertices.append((cubeRet.vertices[j].x + (offsetPos.x * i)), (cubeRet.vertices[j].y + (offsetPos.y * i )), (cubeRet.vertices[j].z + (offsetPos.z * i)), 1.0f);
+                    std::mt19937_64 gen(i);
+                    std::uniform_real_distribution<float> offDis(-100.0f, 100.0f);
+                    std::uniform_real_distribution<float> scaleDis(0.5f, 5.0f);
+                    
+                    cubeRet.vertices.append((cubeRet.vertices[j].x + offDis(gen)) * scaleDis(gen), (cubeRet.vertices[j].y + offDis(gen)) * scaleDis(gen), (cubeRet.vertices[j].z + offDis(gen)) * scaleDis(gen), 1.0f);
                     cubeRet.numTotalVerts++;
                 }
                 
@@ -112,36 +94,36 @@ ShapeData ShapeGenerator::GenerateCubes(int numCubes, glFloat3 pos, glFloat3 off
     return cubeRet;
 }
 
-ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, glFloat3 pos, glFloat3 offsetPos)
+ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, glFloat3 initialPos)
 {
     if(addedInitialCylinder == false)
     {
-        AddCylinderVertex(0.87f + pos.x, -1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCylinderVertex(0.5f + pos.x, -1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCylinderVertex(0.0f + pos.x, -1.0f + pos.y, -1.0f + pos.z, 1.0f);
-        AddCylinderVertex(-0.5f + pos.x, -1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCylinderVertex(-0.87f + pos.x, -1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCylinderVertex(-1.0f + pos.x, -1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCylinderVertex(-0.87f + pos.x, -1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCylinderVertex(-0.5f + pos.x, -1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCylinderVertex(0.0f + pos.x, -1.0f + pos.y, 1.0f + pos.z, 1.0f);
-        AddCylinderVertex(0.5f + pos.x, -1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCylinderVertex(0.87f + pos.x, -1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCylinderVertex(1.0f + pos.x, -1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCylinderVertex(0.87f + pos.x, 1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCylinderVertex(0.5f + pos.x, 1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCylinderVertex(0.0f + pos.x, 1.0f + pos.y, -1.0f + pos.z, 1.0f);
-        AddCylinderVertex(-0.5f + pos.x, 1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCylinderVertex(-0.87f + pos.x, 1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCylinderVertex(-1.0f + pos.x, 1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCylinderVertex(-0.87f + pos.x, 1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCylinderVertex(-0.5f + pos.x, 1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCylinderVertex(0.0f + pos.x, 1.0f + pos.y, 1.0f + pos.z, 1.0f);
-        AddCylinderVertex(0.5f + pos.x, 1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCylinderVertex(0.87f + pos.x, 1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCylinderVertex(1.0f + pos.x, 1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCylinderVertex(0.0f + pos.x, -1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCylinderVertex(0.0f + pos.x, 1.0f + pos.y, 0.0f + pos.z, 1.0f);
+        AddCylinderVertex(0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.0f + initialPos.x, -1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(-1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.0f + initialPos.x, -1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.0f + initialPos.x, 1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(-1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.0f + initialPos.x, 1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCylinderVertex(1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCylinderVertex(0.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
     }
     
     unsigned int cylinderIndices[] =
@@ -229,40 +211,6 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, glFloat3 pos, glFl
     
     addedInitialCylinder = true;
     
-    if(offsetPos.x <= 2.0f)
-    {
-        if(offsetPos.x != 0.0f)
-        {
-            offsetPos.x = 2.5f;
-        }
-        else
-        {
-            offsetPos.x = 0.0f;
-        }
-    }
-    if(offsetPos.y <= 2.0f)
-    {
-        if(offsetPos.y != 0.0f)
-        {
-            offsetPos.y = 2.5f;
-        }
-        else
-        {
-            offsetPos.y = 0.0f;
-        }
-    }
-    if(offsetPos.z <= 2.0f)
-    {
-        if(offsetPos.z != 0.0f)
-        {
-            offsetPos.z = 2.5f;
-        }
-        else
-        {
-            offsetPos.z = 0.0f;
-        }
-    }
-    
     if(addedInitialCylinder)
     {
         if(numCylinders > 1)
@@ -271,7 +219,10 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, glFloat3 pos, glFl
             {
                 for(int j = 0; j < cylinderRet.numVertices; j++)
                 {
-                    cylinderRet.vertices.append((cylinderRet.vertices[j].x + (offsetPos.x * i)), (cylinderRet.vertices[j].y + (offsetPos.y * i )), (cylinderRet.vertices[j].z + (offsetPos.z * i)), 1.0f);
+                    std::mt19937_64 gen(i);
+                    std::uniform_real_distribution<float> offDis(-100.0f, 100.0f);
+                    
+                    cylinderRet.vertices.append((cylinderRet.vertices[j].x + offDis(gen)), (cylinderRet.vertices[j].y + offDis(gen)), (cylinderRet.vertices[j].z + offDis(gen)), 1.0f);
                     cylinderRet.numTotalVerts++;
                 }
                 
@@ -287,84 +238,84 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, glFloat3 pos, glFl
     return cylinderRet;
 }
 
-ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, glFloat3 pos, glFloat3 offsetPos)
+ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, glFloat3 initialPos)
 {
     if(addedInitialCapsule == false)
     {
-        AddCapsuleVertex(0.43f + pos.x, -1.87f + pos.y, -0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(0.25f + pos.x, -1.87f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + pos.x, -1.87f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + pos.x, -1.87f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, -1.87f + pos.y, -0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + pos.x, -1.87f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, -1.87f + pos.y, 0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + pos.x, -1.87f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, -1.87f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(0.25f + pos.x, -1.87f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.43f + pos.x, -1.87f + pos.y, 0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(0.5f + pos.x, -1.87f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.75f + pos.x, -1.5f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.43f + pos.x, -1.5f + pos.y, -0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + pos.x, -1.5f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, -1.5f + pos.y, -0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + pos.x, -1.5f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + pos.x, -1.5f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + pos.x, -1.5f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, -1.5f + pos.y, 0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, -1.5f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.43f + pos.x, -1.5f + pos.y, 0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(0.75f + pos.x, -1.5f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.87f + pos.x, -1.5f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.87f + pos.x, -1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(0.5f + pos.x, -1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, -1.0f + pos.y, -1.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + pos.x, -1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + pos.x, -1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(-1.0f + pos.x, -1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + pos.x, -1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + pos.x, -1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, -1.0f + pos.y, 1.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.5f + pos.x, -1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.87f + pos.x, -1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(1.0f + pos.x, -1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.87f + pos.x, 1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(0.5f + pos.x, 1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, 1.0f + pos.y, -1.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + pos.x, 1.0f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + pos.x, 1.0f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(-1.0f + pos.x, 1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + pos.x, 1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + pos.x, 1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, 1.0f + pos.y, 1.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.5f + pos.x, 1.0f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.87f + pos.x, 1.0f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(1.0f + pos.x, 1.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.75f + pos.x, 1.5f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.43f + pos.x, 1.5f + pos.y, -0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + pos.x, 1.5f + pos.y, -0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, 1.5f + pos.y, -0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + pos.x, 1.5f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + pos.x, 1.5f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + pos.x, 1.5f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, 1.5f + pos.y, 0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, 1.5f + pos.y, 0.87f + pos.z, 1.0f);
-        AddCapsuleVertex(0.43f + pos.x, 1.5f + pos.y, 0.75f + pos.z, 1.0f);
-        AddCapsuleVertex(0.75f + pos.x, 1.5f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.87f + pos.x, 1.5f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.43f + pos.x, 1.87f + pos.y, -0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(0.25f + pos.x, 1.87f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + pos.x, 1.87f + pos.y, -0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + pos.x, 1.87f + pos.y, -0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, 1.87f + pos.y, -0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + pos.x, 1.87f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + pos.x, 1.87f + pos.y, 0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + pos.x, 1.87f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, 1.87f + pos.y, 0.5f + pos.z, 1.0f);
-        AddCapsuleVertex(0.25f + pos.x, 1.87f + pos.y, 0.43f + pos.z, 1.0f);
-        AddCapsuleVertex(0.43f + pos.x, 1.87f + pos.y, 0.25f + pos.z, 1.0f);
-        AddCapsuleVertex(0.5f + pos.x, 1.87f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, -2.0f + pos.y, 0.0f + pos.z, 1.0f);
-        AddCapsuleVertex(0.0f + pos.x, 2.0f + pos.y, 0.0f + pos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, -1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.25f + initialPos.x, -1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.0f + initialPos.x, -1.87f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.25f + initialPos.x, -1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, -1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.5f + initialPos.x, -1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, -1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.25f + initialPos.x, -1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, -1.87f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.25f + initialPos.x, -1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, -1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.5f + initialPos.x, -1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.75f + initialPos.x, -1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, -1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.0f + initialPos.x, -1.5f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, -1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.75f + initialPos.x, -1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.87f + initialPos.x, -1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.75f + initialPos.x, -1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, -1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, -1.5f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, -1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.75f + initialPos.x, -1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.87f + initialPos.x, -1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, -1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, -1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, 1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, 1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.75f + initialPos.x, 1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, 1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.0f + initialPos.x, 1.5f + initialPos.y, -0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, 1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.75f + initialPos.x, 1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.87f + initialPos.x, 1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.75f + initialPos.x, 1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, 1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, 1.5f + initialPos.y, 0.87f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, 1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.75f + initialPos.x, 1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.87f + initialPos.x, 1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, 1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.25f + initialPos.x, 1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.0f + initialPos.x, 1.87f + initialPos.y, -0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.25f + initialPos.x, 1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, 1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.5f + initialPos.x, 1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.43f + initialPos.x, 1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(-0.25f + initialPos.x, 1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, 1.87f + initialPos.y, 0.5f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.25f + initialPos.x, 1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.43f + initialPos.x, 1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.5f + initialPos.x, 1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, -2.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
+        AddCapsuleVertex(0.0f + initialPos.x, 2.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
     }
     
     unsigned int capsuleIndices[] =
@@ -525,40 +476,6 @@ ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, glFloat3 pos, glFloa
     
     addedInitialCapsule = true;
     
-    if(offsetPos.x <= 2.0f)
-    {
-        if(offsetPos.x != 0.0f)
-        {
-            offsetPos.x = 2.5f;
-        }
-        else
-        {
-            offsetPos.x = 0.0f;
-        }
-    }
-    if(offsetPos.y <= 4.0f)
-    {
-        if(offsetPos.y != 0.0f)
-        {
-            offsetPos.y = 4.0f;
-        }
-        else
-        {
-            offsetPos.y = 0.0f;
-        }
-    }
-    if(offsetPos.z <= 2.0f)
-    {
-        if(offsetPos.z != 0.0f)
-        {
-            offsetPos.z = 2.5f;
-        }
-        else
-        {
-            offsetPos.z = 0.0f;
-        }
-    }
-    
     if(addedInitialCapsule)
     {
         if(numCapsules > 1)
@@ -567,7 +484,10 @@ ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, glFloat3 pos, glFloa
             {
                 for(int j = 0; j < capsuleRet.numVertices; j++)
                 {
-                    capsuleRet.vertices.append((capsuleRet.vertices[j].x + (offsetPos.x * i)), (capsuleRet.vertices[j].y + (offsetPos.y * i )), (capsuleRet.vertices[j].z + (offsetPos.z * i)), 1.0f);
+                    std::mt19937_64 gen(i);
+                    std::uniform_real_distribution<float> offDis(-100.0f, 100.0f);
+                    
+                    capsuleRet.vertices.append((capsuleRet.vertices[j].x + offDis(gen)), (capsuleRet.vertices[j].y + offDis(gen)), (capsuleRet.vertices[j].z + offDis(gen)), 1.0f);
                     capsuleRet.numTotalVerts++;
                 }
                 

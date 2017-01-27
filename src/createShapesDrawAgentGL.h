@@ -10,7 +10,6 @@
 #define CreateShapesDrawAgentGL_h
 
 #include "createShapesDrawAgent.h"
-//#include "Commons.h"
 
 class CreateShapesDrawAgentGL : public CreateShapesDrawAgent
 {

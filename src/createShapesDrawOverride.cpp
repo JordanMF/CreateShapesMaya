@@ -237,10 +237,16 @@ void CreateShapesDrawOverride::addUIDrawables(const MDagPath& objPath, MHWRender
     
     if(drawShapes)
     {
-        shape.GenerateCubes(10, glFloat3(0.0f, 0.0f, 0.0f), glFloat3(1.0f, 5.0f, 2.0f));
-        shape.GenerateCylinders(2, glFloat3(7.0f, 0.0f, 3.0f), glFloat3(0.0f, 0.0f, 1.0f));
-        shape.GenerateCapsules(3, glFloat3(0.0f, 3.0f, 0.0f), glFloat3(0.0f, 3.0f, 0.0f));
-    
+        std::random_device rd;
+        std::mt19937_64 gen(rd());
+        std::uniform_real_distribution<float> dis(-20.0f, 20.0f);
+        
+        cout << &CreateShapes::parentMatrix;
+        
+        shape.GenerateCubes(50000, glFloat3(dis(gen), dis(gen), dis(gen)), glFloat3(1.0f, 1.0f, 1.0f));
+        shape.GenerateCylinders(10000, glFloat3(dis(gen), 0.0f, dis(gen)));
+        shape.GenerateCapsules(30000, glFloat3(dis(gen), 2.0f, dis(gen)));
+
         drawShapes = false;
     }
 
@@ -324,10 +330,10 @@ void CreateShapesDrawOverride::draw(const MHWRender::MDrawContext& context, cons
     // since the bounds draw is handled by the renderer and
     // doesn't need to be drawn here.
     //
-    if ( drawAsBoundingbox && !footData->fCustomBoxDraw )
-    {
-        drawAsBoundingbox = false;
-    }
+//    if ( drawAsBoundingbox && !footData->fCustomBoxDraw )
+//    {
+//        drawAsBoundingbox = false;
+//    }
     
     // For any viewport interactions switch to bounding box mode,
     // except when we are in playback. Uncomment to enable usage.
