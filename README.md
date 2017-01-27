@@ -3,7 +3,7 @@
 ## Creating the project
 
 1. Create a new folder called 'build'.
-2. In Terminal (OSX) type "cmake -G -DMAYA_VERSION=20xx ../"
+2. In Terminal (OSX) type "cmake -G "Your " -DMAYA_VERSION=20xx ../"
 3. Now you can find the project file inside the build folder.
 
 ## Loading the plug-in
@@ -19,4 +19,4 @@
 	node = cmds.createNode('reflection')"
 	* (If using MEL) "createNode reflection"
 2. Once created, a locator will appear at the origin of the viewport (0, 0, 0) along with the shapes.
-3. From there the locator can be tranlated/rotated/scaled.
+3. From there, the locator can be translated/rotated/scaled.
