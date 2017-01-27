@@ -8,8 +8,7 @@
 
 #include "createShapesDrawOverride.h"
 
-#include <maya/MFnDependencyNode.h>
-#include <maya/MFloatArray.h>
+#include <random>
 
 CreateShapesDrawOverride::CreateShapesDrawOverride(const MObject& obj) : MHWRender::MPxDrawOverride(obj, CreateShapesDrawOverride::draw, false), mCustomBoxDraw(true)
 , mExcludeFromPostEffects(false)

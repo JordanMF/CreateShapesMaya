@@ -14,7 +14,6 @@
 #include "createShapesDrawAgentCoreProfile.h"
 #include "ShapeGenerator.h"
 #include <assert.h>
-#include <random>
 
 class CreateShapesDrawOverride : public MHWRender::MPxDrawOverride
 {
