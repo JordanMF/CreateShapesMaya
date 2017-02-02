@@ -12,7 +12,7 @@ MStatus initializePlugin(MObject obj)
     // Tell Maya that the node is a locator node type
     // Done using MPxNode;:kLocatorNode
     // MPxNode::kWhateverType
-    status = fnPlugin.registerNode("reflection", CreateShapes::_id, CreateShapes::Creator, CreateShapes::Initialize, MPxNode::kLocatorNode, &CreateShapes::drawDbClassification);
+    status = fnPlugin.registerNode("createShapes", CreateShapes::_id, CreateShapes::Creator, CreateShapes::Initialize, MPxNode::kLocatorNode, &CreateShapes::drawDbClassification);
     CHECK_MSTATUS_AND_RETURN_IT(status);
     
     // Viewport 2.0

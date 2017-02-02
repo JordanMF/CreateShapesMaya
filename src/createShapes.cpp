@@ -5,13 +5,8 @@ MTypeId CreateShapes::_id(0x00000235);
 
 // Viewport 2.0 info
 MObject CreateShapes::size;
-//MObject CreateShapes::sizeX;
 MObject CreateShapes::transparencySort;
 MObject CreateShapes::transparency;
-MObject CreateShapes::colorR;
-MObject CreateShapes::colorG;
-MObject CreateShapes::colorB;
-MObject CreateShapes::color;
 MString CreateShapes::drawDbClassification("drawdb/geometry/createShapes");
 MString CreateShapes::drawRegistrantId("createShapesNodePlugin");
 
@@ -56,14 +51,6 @@ MStatus CreateShapes::Initialize()
     }
     // Add dependency on the localScale attribute, so that when size is modified CreateShapesDrawOverride::transform will get called
     attributeAffects(CreateShapes::size, MPxLocatorNode::localScale);
-    
-    color = numAttr.createColor("color", "c");
-    addAttribute(color);
-    if (!status)
-    {
-        status.perror("addAttribute");
-        return status;
-    }
     
     transparencySort = numAttr.create("transparencySort", "ts", MFnNumericData::kBoolean);
     numAttr.setDefault(false);
