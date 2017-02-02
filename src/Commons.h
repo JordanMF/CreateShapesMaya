@@ -20,12 +20,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include <math.h>
-#include <iostream>
-
-#include <maya/MUintArray.h>
-#include <maya/MPointArray.h>
-
 struct glFloat3
 {
     float x;
@@ -82,17 +76,6 @@ static unsigned short bbWireIndices[] =
     1,5,
     2,6,
     3,7
-};
-
-struct ShapeData
-{
-    ShapeData() : vertices(0, MPoint(0.0f, 0.0f, 0.0f, 1.0f)), numVertices(0), indices(0), numIndices(0) {}
-    
-    MPointArray vertices;
-    unsigned int numVertices;
-    
-    MUintArray* indices;
-    unsigned int numIndices;
 };
 
 #endif

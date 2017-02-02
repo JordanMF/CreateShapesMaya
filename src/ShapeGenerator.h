@@ -9,15 +9,25 @@
 #ifndef ShapeGenerator_h
 #define ShapeGenerator_h
 
-#include "Commons.h"
+#include <math.h>
 #include <random>
-#include <numeric>
+#include <iostream>
 
-#include <maya/MFnTransform.h>
-#include <maya/MPxTransform.h>
+#include <maya/MPointArray.h>
+#include <maya/MUintArray.h>
 #include <maya/MPxTransformationMatrix.h>
 #include <maya/MTransformationMatrix.h>
-#include <maya/MVectorArray.h>
+
+struct ShapeData
+{
+    ShapeData() : vertices(0, MPoint(0.0f, 0.0f, 0.0f, 1.0f)), numVertices(0), indices(0), numIndices(0) {}
+    
+    MPointArray vertices;
+    unsigned int numVertices;
+    
+    MUintArray* indices;
+    unsigned int numIndices;
+};
 
 class ShapeGenerator
 {
@@ -42,7 +52,7 @@ private:
     ShapeData cylinderRet;
     ShapeData capsuleRet;
     
-    const float degtoRad = 0.0174533;
+    const float degtoRad = 0.0174533f;
 };
 
 #endif
