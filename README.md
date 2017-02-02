@@ -16,7 +16,7 @@
 
 1. To create the plugin, open the Script Editor and type:
 	* (If using Python) "import maya.cmds as cmds 
-	node = cmds.createNode('reflection')"
-	* (If using MEL) "createNode reflection"
+	node = cmds.createNode('createShapes')"
+	* (If using MEL) "createNode createShapes"
 2. Once created, a locator will appear at the origin of the viewport (0, 0, 0) along with the shapes.
 3. From there, the locator can be translated/rotated/scaled.
