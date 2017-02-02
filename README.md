@@ -3,7 +3,7 @@
 ## Creating the project
 
 1. Create a new folder called 'build'.
-2. In Terminal (OSX) type "cmake -G "Your " -DMAYA_VERSION=20xx ../"
+2. In Terminal (OSX) type "cmake -G "Your IDE goes here" -D MAYA_VERSION=20xx ../"
 3. Now you can find the project file inside the build folder.
 
 ## Loading the plug-in
