@@ -86,16 +86,13 @@ static unsigned short bbWireIndices[] =
 
 struct ShapeData
 {
-    ShapeData() : vertices(0, MPoint(0.0f, 0.0f, 0.0f, 1.0f)), numVertices(0), indices(0), numIndices(0), numTotalVerts(0), numTotalIndices(0) {}
+    ShapeData() : vertices(0, MPoint(0.0f, 0.0f, 0.0f, 1.0f)), numVertices(0), indices(0), numIndices(0) {}
     
     MPointArray vertices;
     unsigned int numVertices;
     
     MUintArray* indices;
     unsigned int numIndices;
-    
-    unsigned int numTotalVerts;
-    unsigned int numTotalIndices;
 };
 
 #endif

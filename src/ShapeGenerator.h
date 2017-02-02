@@ -11,21 +11,24 @@
 
 #include "Commons.h"
 #include <random>
+#include <numeric>
 
+#include <maya/MFnTransform.h>
 #include <maya/MPxTransform.h>
 #include <maya/MPxTransformationMatrix.h>
 #include <maya/MTransformationMatrix.h>
+#include <maya/MVectorArray.h>
 
 class ShapeGenerator
 {
 public:
-    ShapeData GenerateCubes(int numCubes, glFloat3 initialPos, glFloat3 scale);
-    ShapeData GenerateCylinders(int numCylinders, glFloat3 initialPos);
-    ShapeData GenerateCapsules(int numCapsules, glFloat3 initialPos);
+    ShapeData GenerateCubes(int numCubes, MVector pos, MVector rot, MVector scale);
+    ShapeData GenerateCylinders(int numCylinders, MVector pos, MVector rot, MVector scale);
+    ShapeData GenerateCapsules(int numCapsules, MVector pos, MVector rot, MVector scale);
     
-    void AddCubeVertex(double x, double y, double z, double w);
-    void AddCylinderVertex(double x, double y, double z, double w);
-    void AddCapsuleVertex(double x, double y, double z, double w);
+    void AddCubeVertex(MVector pos);
+    void AddCylinderVertex(MVector pos);
+    void AddCapsuleVertex(MVector pos);
     
     MPointArray GetCubeVertices() { return cubeRet.vertices; }
     MUintArray* GetCubeIndices() { return cubeRet.indices; }
@@ -39,9 +42,7 @@ private:
     ShapeData cylinderRet;
     ShapeData capsuleRet;
     
-    bool addedInitialCube = false;
-    bool addedInitialCylinder = false;
-    bool addedInitialCapsule = false;
+    const float degtoRad = 0.0174533;
 };
 
 #endif

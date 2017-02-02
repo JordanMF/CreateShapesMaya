@@ -8,125 +8,110 @@
 
 #include "ShapeGenerator.h"
 
-ShapeData ShapeGenerator::GenerateCubes(int numCubes, glFloat3 initialPos, glFloat3 scale)
-{
-    MTransformationMatrix matrix;
-    
-    MVector positionX = MVector(initialPos.x, 0.0f, 0.0f);
-    MVector positionY = MVector(initialPos.y, 0.0f, 0.0f);
-    MVector positionZ = MVector(initialPos.z, 0.0f, 0.0f);
-    
-    if(addedInitialCube == false)
+ShapeData ShapeGenerator::GenerateCubes(int numCubes, MVector pos, MVector rot, MVector scale)
+{    
+    MVector vertexPositions[8] =
     {
-        matrix.addTranslation(positionX, MSpace::kTransform);
-        matrix.addTranslation(positionY, MSpace::kTransform);
-        matrix.addTranslation(positionZ, MSpace::kTransform);
+        MVector(-0.5f, -0.5f, 0.5),
+        MVector(0.5f, -0.5f, 0.5),
+        MVector(-0.5f, 0.5f, 0.5),
+        MVector(0.5f, 0.5f, 0.5),
+        MVector(-0.5f, 0.5f, -0.5),
+        MVector(0.5f, 0.5f, -0.5),
+        MVector(-0.5f, -0.5f, -0.5),
+        MVector(0.5f, -0.5f, -0.5),
+    };
         
-        MQuaternion q;
-        
-        matrix.rotateBy(q, MSpace::kTransform);
-        
-        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((0.5f + initialPos.x) * scale.x, (0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (-0.5 + initialPos.z) * scale.z, 1.0f);
-        AddCubeVertex((-0.5f + initialPos.x) * scale.x, (-0.5f + initialPos.y) * scale.y, (0.5 + initialPos.z) * scale.z, 1.0f);
-    }
-    
-        unsigned int cubeIndices[] =
-        {
-            0, 1, 2,
-            2, 1, 3,
-            2, 3, 4,
-            4, 3, 5,
-            4, 5, 6,
-            6, 5, 7,
-            6, 7, 0,
-            0, 7, 1,
-            1, 7, 3,
-            3, 7, 5,
-            6, 0, 4,
-            4, 0, 2,
-        };
-    
-    cubeRet.numVertices = cubeRet.vertices.length();
-    cubeRet.numTotalVerts = cubeRet.numVertices;
-    
-    cubeRet.numIndices = sizeof(cubeIndices) / sizeof(*cubeIndices);
-    cubeRet.numTotalIndices = cubeRet.numIndices;
-    
-    cubeRet.indices = new MUintArray(cubeIndices, cubeRet.numIndices);
-    
-    addedInitialCube = true;
-    
-    if(addedInitialCube)
+    unsigned int indices[36] =
     {
-        if(numCubes > 1)
+        0, 1, 2,
+        2, 1, 3,
+        2, 3, 4,
+        4, 3, 5,
+        4, 5, 6,
+        6, 5, 7,
+        6, 7, 0,
+        0, 7, 1,
+        1, 7, 3,
+        3, 7, 5,
+        6, 0, 4,
+        4, 0, 2,
+    };
+    
+    cubeRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    cubeRet.vertices = MPointArray();
+    
+    cubeRet.numIndices = sizeof(indices) / sizeof(*indices);
+    cubeRet.indices = new MUintArray();
+    
+    for(int i = 0; i < numCubes; ++i)
+    {
+        std::mt19937_64 gen(i);
+        std::uniform_real_distribution<float> offDis(-200.0f, 200.0f);
+        std::uniform_real_distribution<float> scaleDis(0.5f, 3.0f);
+        std::uniform_real_distribution<float> rotDis(0.0f, 90.0f);
+        
+        MTransformationMatrix matrix;
+        
+        MVector newPos = MVector(offDis(gen), offDis(gen), offDis(gen));
+        matrix.setTranslation(newPos, MSpace::kWorld);
+        
+        double newScale1[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
+        matrix.setScale(newScale1, MSpace::kWorld);
+        
+        double newRot1[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
+        MTransformationMatrix::RotationOrder ro = MTransformationMatrix::kXYZ;
+        matrix.setRotation(newRot1, ro, MSpace::kWorld);
+        
+        for(int j = 0; j < cubeRet.numVertices; ++j)
         {
-            for(int i = 1; i < numCubes; i++)
-            {
-                for(int j = 0; j < cubeRet.numVertices; j++)
-                {
-                    std::mt19937_64 gen(i);
-                    std::uniform_real_distribution<float> offDis(-100.0f, 100.0f);
-                    std::uniform_real_distribution<float> scaleDis(0.5f, 5.0f);
-                    
-                    cubeRet.vertices.append((cubeRet.vertices[j].x + offDis(gen)) * scaleDis(gen), (cubeRet.vertices[j].y + offDis(gen)) * scaleDis(gen), (cubeRet.vertices[j].z + offDis(gen)) * scaleDis(gen), 1.0f);
-                    cubeRet.numTotalVerts++;
-                }
-                
-                for(unsigned int k = 0; k < (cubeRet.numIndices); k++)
-                {
-                    cubeRet.indices->append((cubeIndices[k] + (cubeRet.numVertices * i)));
-                    cubeRet.numTotalIndices++;
-                }
-            }
+            MVector newVertexPosition = vertexPositions[j] * matrix.asMatrix() + newPos;
+            
+            AddCubeVertex(newVertexPosition);
+        }
+        
+        for(unsigned int k = 0; k < (cubeRet.numIndices); ++k)
+        {
+            cubeRet.indices->append((indices[k] + (cubeRet.numVertices * i)));
         }
     }
-    
+
     return cubeRet;
 }
 
-ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, glFloat3 initialPos)
+ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, MVector pos, MVector rot, MVector scale)
 {
-    if(addedInitialCylinder == false)
+    MVector vertexPositions[26] =
     {
-        AddCylinderVertex(0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.0f + initialPos.x, -1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(-1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.0f + initialPos.x, -1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.0f + initialPos.x, 1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(-1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.0f + initialPos.x, 1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCylinderVertex(1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCylinderVertex(0.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-    }
+        MVector(0.87f, -1.0f, -0.5),
+        MVector(0.5f, -1.0f, -0.87),
+        MVector(0.0f, -1.0f, -1.0),
+        MVector(-0.5f, -1.0f, -0.87),
+        MVector(-0.87f, -1.0f, -0.5),
+        MVector(-1.0f, -1.0f, 0.0),
+        MVector(-0.87f, -1.0f, 0.5),
+        MVector(-0.5f, -1.0f, 0.87),
+        MVector(0.0f, -1.0f, 1.0),
+        MVector(0.5f, -1.0f, 0.87),
+        MVector(0.87f, -1.0f, 0.5),
+        MVector(1.0f, -1.0f, 0.0),
+        MVector(0.87f, 1.0f, -0.5),
+        MVector(0.5f, 1.0f, -0.87),
+        MVector(0.0f, 1.0f, -1.0),
+        MVector(-0.5f, 1.0f, -0.87),
+        MVector(-0.87f, 1.0f, -0.5),
+        MVector(-1.0f, 1.0f, 0.0),
+        MVector(-0.87f, 1.0f, 0.5),
+        MVector(-0.5f, 1.0f, 0.87),
+        MVector(0.0f, 1.0f, 1.0),
+        MVector(0.5f, 1.0f, 0.87),
+        MVector(0.87f, 1.0f, 0.5),
+        MVector(1.0f, 1.0f, 0.0),
+        MVector(0.0f, -1.0f, 0.0),
+        MVector(0.0f, 1.0f, 0.0),
+    };
     
-    unsigned int cylinderIndices[] =
+    unsigned int indices[144] =
     {
         0, 1, 12,
         12, 1, 13,
@@ -201,124 +186,130 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, glFloat3 initialPo
         23, 12, 25,
     };
     
-    cylinderRet.numVertices = cylinderRet.vertices.length();
-    cylinderRet.numTotalVerts = cylinderRet.numVertices;
+    cylinderRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    cylinderRet.vertices = MPointArray();
     
-    cylinderRet.numIndices = sizeof(cylinderIndices) / sizeof(*cylinderIndices);
-    cylinderRet.numTotalIndices = cylinderRet.numIndices;
+    cylinderRet.numIndices = sizeof(indices) / sizeof(*indices);
+    cylinderRet.indices = new MUintArray();
     
-    cylinderRet.indices = new MUintArray(cylinderIndices, cylinderRet.numIndices);
-    
-    addedInitialCylinder = true;
-    
-    if(addedInitialCylinder)
+    for(int i = 0; i < numCylinders; ++i)
     {
-        if(numCylinders > 1)
+        std::mt19937_64 gen(i);
+        std::uniform_real_distribution<float> offDis(-600.0f, 600.0f);
+        std::uniform_real_distribution<float> scaleDis(0.5f, 4.0f);
+        std::uniform_real_distribution<float> rotDis(0.0f, 90.0f);
+        
+        MTransformationMatrix matrix;
+        
+        MVector newPos = MVector(offDis(gen), offDis(gen), offDis(gen));
+        matrix.setTranslation(newPos, MSpace::kWorld);
+        
+        double newScale1[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
+        matrix.setScale(newScale1, MSpace::kWorld);
+        
+        double newRot1[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
+        MTransformationMatrix::RotationOrder ro = MTransformationMatrix::kXYZ;
+        matrix.setRotation(newRot1, ro, MSpace::kWorld);
+        
+        for(int j = 0; j < cylinderRet.numVertices; ++j)
         {
-            for(int i = 1; i < numCylinders; i++)
-            {
-                for(int j = 0; j < cylinderRet.numVertices; j++)
-                {
-                    std::mt19937_64 gen(i);
-                    std::uniform_real_distribution<float> offDis(-100.0f, 100.0f);
-                    
-                    cylinderRet.vertices.append((cylinderRet.vertices[j].x + offDis(gen)), (cylinderRet.vertices[j].y + offDis(gen)), (cylinderRet.vertices[j].z + offDis(gen)), 1.0f);
-                    cylinderRet.numTotalVerts++;
-                }
-                
-                for(unsigned int k = 0; k < (cylinderRet.numIndices); k++)
-                {
-                    cylinderRet.indices->append((cylinderIndices[k] + (cylinderRet.numVertices * i)));
-                    cylinderRet.numTotalIndices++;
-                }
-            }
+            MVector newVertexPosition = vertexPositions[j] * matrix.asMatrix() + newPos;
+            
+            AddCylinderVertex(newVertexPosition);
+        }
+        
+        for(unsigned int k = 0; k < (cylinderRet.numIndices); ++k)
+        {
+            cylinderRet.indices->append((indices[k] + (cylinderRet.numVertices * i)));
         }
     }
     
     return cylinderRet;
 }
 
-ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, glFloat3 initialPos)
+ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, MVector pos, MVector rot, MVector scale)
 {
-    if(addedInitialCapsule == false)
-    {
-        AddCapsuleVertex(0.43f + initialPos.x, -1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.25f + initialPos.x, -1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + initialPos.x, -1.87f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + initialPos.x, -1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, -1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + initialPos.x, -1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, -1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + initialPos.x, -1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, -1.87f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.25f + initialPos.x, -1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.43f + initialPos.x, -1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.5f + initialPos.x, -1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.75f + initialPos.x, -1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.43f + initialPos.x, -1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + initialPos.x, -1.5f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, -1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + initialPos.x, -1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + initialPos.x, -1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + initialPos.x, -1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, -1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, -1.5f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.43f + initialPos.x, -1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.75f + initialPos.x, -1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.87f + initialPos.x, -1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, -1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, -1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.5f + initialPos.x, -1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.87f + initialPos.x, -1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(1.0f + initialPos.x, -1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, 1.0f + initialPos.y, -1.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, 1.0f + initialPos.y, 1.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.5f + initialPos.x, 1.0f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.87f + initialPos.x, 1.0f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(1.0f + initialPos.x, 1.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.75f + initialPos.x, 1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.43f + initialPos.x, 1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + initialPos.x, 1.5f + initialPos.y, -0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, 1.5f + initialPos.y, -0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + initialPos.x, 1.5f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.87f + initialPos.x, 1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.75f + initialPos.x, 1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, 1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, 1.5f + initialPos.y, 0.87f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.43f + initialPos.x, 1.5f + initialPos.y, 0.75f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.75f + initialPos.x, 1.5f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.87f + initialPos.x, 1.5f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.43f + initialPos.x, 1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.25f + initialPos.x, 1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.0f + initialPos.x, 1.87f + initialPos.y, -0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + initialPos.x, 1.87f + initialPos.y, -0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, 1.87f + initialPos.y, -0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.5f + initialPos.x, 1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.43f + initialPos.x, 1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(-0.25f + initialPos.x, 1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, 1.87f + initialPos.y, 0.5f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.25f + initialPos.x, 1.87f + initialPos.y, 0.43f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.43f + initialPos.x, 1.87f + initialPos.y, 0.25f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.5f + initialPos.x, 1.87f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, -2.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-        AddCapsuleVertex(0.0f + initialPos.x, 2.0f + initialPos.y, 0.0f + initialPos.z, 1.0f);
-    }
+    MTransformationMatrix matrix;
     
-    unsigned int capsuleIndices[] =
+    MVector vertexPositions[74] =
+    {
+        MVector(0.43f, -1.87f, -0.25),
+        MVector(0.25f, -1.87f, -0.43),
+        MVector(-0.0f, -1.87f, -0.5),
+        MVector(-0.25f, -1.87f, -0.43),
+        MVector(-0.43f, -1.87f, -0.25),
+        MVector(-0.5f, -1.87f, 0.0),
+        MVector(-0.43f, -1.87f, 0.25),
+        MVector(-0.25f, -1.87f, 0.43),
+        MVector(0.0f, -1.87f, 0.5),
+        MVector(0.25f, -1.87f, 0.43),
+        MVector(0.43f, -1.87f, 0.25),
+        MVector(0.5f, -1.87f, 0.0),
+        MVector(0.75f, -1.5f, -0.43),
+        MVector(0.43f, -1.5f, -0.75),
+        MVector(-0.0f, -1.5f, -0.87),
+        MVector(-0.43f, -1.5f, -0.75),
+        MVector(-0.75f, -1.5f, -0.43),
+        MVector(-0.87f, -1.5f, 0.0),
+        MVector(-0.75f, -1.5f, 0.43),
+        MVector(-0.43f, -1.5f, 0.75),
+        MVector(0.0f, -1.5f, 0.87),
+        MVector(0.43f, -1.5f, 0.75),
+        MVector(0.75f, -1.5f, 0.43),
+        MVector(0.87f, -1.5f, 0.0),
+        MVector(0.87f, -1.0f, -0.5),
+        MVector(0.5f, -1.0f, -0.87),
+        MVector(0.0f, -1.0f, -1.0),
+        MVector(-0.5f, -1.0f, -0.87),
+        MVector(-0.87f, -1.0f, -0.5),
+        MVector(-1.0f, -1.0f, 0.0),
+        MVector(-0.87f, -1.0f, 0.5),
+        MVector(-0.5f, -1.0f, 0.87),
+        MVector(0.0f, -1.0f, 1.0),
+        MVector(0.5f, -1.0f, 0.87),
+        MVector(0.87f, -1.0f, 0.5),
+        MVector(1.0f, -1.0f, 0.0),
+        MVector(0.87f, 1.0f, -0.5),
+        MVector(0.5f, 1.0f, -0.87),
+        MVector(0.0f, 1.0f, -1.0),
+        MVector(-0.5f, 1.0f, -0.87),
+        MVector(-0.87f, 1.0f, -0.5),
+        MVector(-1.0f, 1.0f, 0.0),
+        MVector(-0.87f, 1.0f, 0.5),
+        MVector(-0.5f, 1.0f, 0.87),
+        MVector(0.0f, 1.0f, 1.0),
+        MVector(0.5f, 1.0f, 0.87),
+        MVector(0.87f, 1.0f, 0.5),
+        MVector(1.0f, 1.0f, 0.0),
+        MVector(0.75f, 1.5f, -0.43),
+        MVector(0.43f, 1.5f, -0.75),
+        MVector(-0.0f, 1.5f, -0.87),
+        MVector(-0.43f, 1.5f, -0.75),
+        MVector(-0.75f, 1.5f, -0.43),
+        MVector(-0.87f, 1.5f, 0.0),
+        MVector(-0.75f, 1.5f, 0.43),
+        MVector(-0.43f, 1.5f, 0.75),
+        MVector(0.0f, 1.5f, 0.87),
+        MVector(0.43f, 1.5f, 0.75),
+        MVector(0.75f, 1.5f, 0.43),
+        MVector(0.87f, 1.5f, 0.0),
+        MVector(0.43f, 1.87f, -0.25),
+        MVector(0.25f, 1.87f, -0.43),
+        MVector(-0.0f, 1.87f, -0.5),
+        MVector(-0.25f, 1.87f, -0.43),
+        MVector(-0.43f, 1.87f, -0.25),
+        MVector(-0.5f, 1.87f, 0.0),
+        MVector(-0.43f, 1.87f, 0.25),
+        MVector(-0.25f, 1.87f, 0.43),
+        MVector(0.0f, 1.87f, 0.5),
+        MVector(0.25f, 1.87f, 0.43),
+        MVector(0.43f, 1.87f, 0.25),
+        MVector(0.5f, 1.87f, 0.0),
+        MVector(0.0f, -2.0f, 0.0),
+        MVector(0.0f, 2.0f, 0.0),
+    };
+    
+    unsigned int indices[432] =
     {
         0, 1, 12,
         12, 1, 13,
@@ -466,66 +457,67 @@ ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, glFloat3 initialPos)
         71, 60, 73,
     };
     
-    capsuleRet.numVertices = capsuleRet.vertices.length();
-    capsuleRet.numTotalVerts = capsuleRet.numVertices;
+    capsuleRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    capsuleRet.vertices = MPointArray();
     
-    capsuleRet.numIndices = sizeof(capsuleIndices) / sizeof(*capsuleIndices);
-    capsuleRet.numTotalIndices = capsuleRet.numIndices;
+    capsuleRet.numIndices = sizeof(indices) / sizeof(*indices);
+    capsuleRet.indices = new MUintArray();
     
-    capsuleRet.indices = new MUintArray(capsuleIndices, capsuleRet.numIndices);
-    
-    addedInitialCapsule = true;
-    
-    if(addedInitialCapsule)
+    for(int i = 0; i < numCapsules; ++i)
     {
-        if(numCapsules > 1)
+        std::mt19937_64 gen(i);
+        std::uniform_real_distribution<float> offDis(-400.0f, 450.0f);
+        std::uniform_real_distribution<float> scaleDis(0.5f, 3.0f);
+        std::uniform_real_distribution<float> rotDis(0.0f, 90.0f);
+        
+        MTransformationMatrix matrix;
+        
+        MVector newPos = MVector(offDis(gen), offDis(gen), offDis(gen));
+        matrix.setTranslation(newPos, MSpace::kWorld);
+        
+        double newScale1[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
+        matrix.setScale(newScale1, MSpace::kWorld);
+        
+        double newRot1[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
+        MTransformationMatrix::RotationOrder ro = MTransformationMatrix::kXYZ;
+        matrix.setRotation(newRot1, ro, MSpace::kWorld);
+        
+        for(int j = 0; j < capsuleRet.numVertices; ++j)
         {
-            for(int i = 1; i < numCapsules; i++)
-            {
-                for(int j = 0; j < capsuleRet.numVertices; j++)
-                {
-                    std::mt19937_64 gen(i);
-                    std::uniform_real_distribution<float> offDis(-100.0f, 100.0f);
-                    
-                    capsuleRet.vertices.append((capsuleRet.vertices[j].x + offDis(gen)), (capsuleRet.vertices[j].y + offDis(gen)), (capsuleRet.vertices[j].z + offDis(gen)), 1.0f);
-                    capsuleRet.numTotalVerts++;
-                }
-                
-                for(unsigned int k = 0; k < (capsuleRet.numIndices); k++)
-                {
-                    capsuleRet.indices->append((capsuleIndices[k] + (capsuleRet.numVertices * i)));
-                    capsuleRet.numTotalIndices++;
-                }
-            }
+            MVector newVertexPosition = vertexPositions[j] * matrix.asMatrix() + newPos;
+            
+            AddCapsuleVertex(newVertexPosition);
+        }
+        
+        for(unsigned int k = 0; k < (capsuleRet.numIndices); ++k)
+        {
+            capsuleRet.indices->append((indices[k] + (capsuleRet.numVertices * i)));
         }
     }
     
     return capsuleRet;
 }
 
-void ShapeGenerator::AddCubeVertex(double x, double y, double z, double w)
+void ShapeGenerator::AddCubeVertex(MVector pos)
 {
-    w = 1.0f;
+    double w = 1.0f;
     
-    MPoint pnt(x, y, z, w);
+    MPoint pnt(pos.x, pos.y, pos.z, w);
     cubeRet.vertices.append(pnt);
-    cubeRet.numVertices++;
 }
 
-void ShapeGenerator::AddCylinderVertex(double x, double y, double z, double w)
+void ShapeGenerator::AddCylinderVertex(MVector pos)
 {
-    w = 1.0f;
+    double w = 1.0f;
     
-    MPoint pnt(x, y, z, w);
+    MPoint pnt(pos.x, pos.y, pos.z, w);
     cylinderRet.vertices.append(pnt);
-    cylinderRet.numVertices++;
 }
 
-void ShapeGenerator::AddCapsuleVertex(double x, double y, double z, double w)
+void ShapeGenerator::AddCapsuleVertex(MVector pos)
 {
-    w = 1.0f;
+    double w = 1.0f;
     
-    MPoint pnt(x, y, z, w);
+    MPoint pnt(pos.x, pos.y, pos.z, w);
     capsuleRet.vertices.append(pnt);
-    capsuleRet.numVertices++;
 }

@@ -236,25 +236,27 @@ void CreateShapesDrawOverride::addUIDrawables(const MDagPath& objPath, MHWRender
     
     if(drawShapes)
     {
-        std::random_device rd;
-        std::mt19937_64 gen(rd());
-        std::uniform_real_distribution<float> dis(-20.0f, 20.0f);
+//        std::random_device rd;
+//        std::mt19937_64 gen(rd());
+//        std::uniform_real_distribution<float> posDis(-8000.0f, 5000.0f);
+//        std::uniform_real_distribution<float> scaleDis(0.5f, 2.0f);
+//        std::uniform_real_distribution<float> rotDis(0.0f, 90.0f);
         
-        cout << &CreateShapes::parentMatrix;
+        shape.GenerateCubes(50000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
+        shape.GenerateCylinders(50000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
+        shape.GenerateCapsules(50000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
         
-        shape.GenerateCubes(50000, glFloat3(dis(gen), dis(gen), dis(gen)), glFloat3(1.0f, 1.0f, 1.0f));
-        shape.GenerateCylinders(10000, glFloat3(dis(gen), 0.0f, dis(gen)));
-        shape.GenerateCapsules(30000, glFloat3(dis(gen), 2.0f, dis(gen)));
-
         drawShapes = false;
     }
 
+    drawManager.setPaintStyle(MHWRender::MUIDrawManager::PaintStyle::kStippled);
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCubeVertices() , NULL, NULL, shape.GetCubeIndices(), NULL);
     drawManager.setColor(MColor(1.0f, 0.0f, 0.0f, 1.0f));
+    drawManager.setPaintStyle(MHWRender::MUIDrawManager::PaintStyle::kShaded);
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCylinderVertices(), NULL, NULL, shape.GetCylinderIndices(), NULL);
     drawManager.setColor(MColor(0.0f, 1.0f, 0.0f, 1.0f));
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCapsuleVertices(), NULL, NULL, shape.GetCapsuleIndices(), NULL);
-    
+
     drawManager.setColor(textColor);
     drawManager.setFontSize(MHWRender::MUIDrawManager::kSmallFontSize);
     drawManager.text(textPos, MString("Some Text"), MHWRender::MUIDrawManager::kCenter);
