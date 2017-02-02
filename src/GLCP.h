@@ -9,10 +9,12 @@
 #ifndef GLCP_h
 #define GLCP_h
 
-#if defined (OSMac_)
+#if defined (_WIN32) || defined (_WIN64)
+    #include <GL/gl.h>
+#elif defined (OSMac_)
     #define GL_DO_NOT_WARN_IF_MULTI_GL_VERSION_HEADERS_INCLUDED
     #include <OpenGL/gl3.h> // For gl*VertexArray(s) and APIENTRY
-#endif // OSMac_
+#endif
 
 class GLCP
 {
