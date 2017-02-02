@@ -242,21 +242,20 @@ void CreateShapesDrawOverride::addUIDrawables(const MDagPath& objPath, MHWRender
 //        std::uniform_real_distribution<float> scaleDis(0.5f, 2.0f);
 //        std::uniform_real_distribution<float> rotDis(0.0f, 90.0f);
         
-        shape.GenerateCubes(50000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
-        shape.GenerateCylinders(50000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
-        shape.GenerateCapsules(50000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
+        shape.GenerateCubes(5000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
+        shape.GenerateCylinders(5000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
+        shape.GenerateCapsules(5000, MVector(0.0f, 0.0f, 0.0f), MVector(0.0f, 0.0f, 0.0f), MVector(1.0f, 1.0f, 1.0f));
         
         drawShapes = false;
     }
-
-    drawManager.setPaintStyle(MHWRender::MUIDrawManager::PaintStyle::kStippled);
+    
+    drawManager.setColor(MColor(1.0f, 1.0f, 1.0f, 0.3f));
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCubeVertices() , NULL, NULL, shape.GetCubeIndices(), NULL);
-    drawManager.setColor(MColor(1.0f, 0.0f, 0.0f, 1.0f));
-    drawManager.setPaintStyle(MHWRender::MUIDrawManager::PaintStyle::kShaded);
+    drawManager.setColor(MColor(1.0f, 0.0f, 0.0f, 0.6f));
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCylinderVertices(), NULL, NULL, shape.GetCylinderIndices(), NULL);
-    drawManager.setColor(MColor(0.0f, 1.0f, 0.0f, 1.0f));
+    drawManager.setColor(MColor(0.0f, 1.0f, 0.0f, 0.6f));
     drawManager.mesh(MHWRender::MUIDrawManager::kTriangles, shape.GetCapsuleVertices(), NULL, NULL, shape.GetCapsuleIndices(), NULL);
-
+    
     drawManager.setColor(textColor);
     drawManager.setFontSize(MHWRender::MUIDrawManager::kSmallFontSize);
     drawManager.text(textPos, MString("Some Text"), MHWRender::MUIDrawManager::kCenter);

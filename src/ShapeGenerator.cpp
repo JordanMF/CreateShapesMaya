@@ -56,12 +56,12 @@ ShapeData ShapeGenerator::GenerateCubes(int numCubes, MVector pos, MVector rot, 
         MVector newPos = MVector(offDis(gen), offDis(gen), offDis(gen));
         matrix.setTranslation(newPos, MSpace::kWorld);
         
-        double newScale1[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
-        matrix.setScale(newScale1, MSpace::kWorld);
+        double newScale[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
+        matrix.setScale(newScale, MSpace::kWorld);
         
-        double newRot1[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
+        double newRot[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
         MTransformationMatrix::RotationOrder ro = MTransformationMatrix::kXYZ;
-        matrix.setRotation(newRot1, ro, MSpace::kWorld);
+        matrix.setRotation(newRot, ro, MSpace::kWorld);
         
         for(int j = 0; j < cubeRet.numVertices; ++j)
         {
@@ -204,12 +204,12 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, MVector pos, MVect
         MVector newPos = MVector(offDis(gen), offDis(gen), offDis(gen));
         matrix.setTranslation(newPos, MSpace::kWorld);
         
-        double newScale1[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
-        matrix.setScale(newScale1, MSpace::kWorld);
+        double newScale[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
+        matrix.setScale(newScale, MSpace::kWorld);
         
-        double newRot1[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
+        double newRot[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
         MTransformationMatrix::RotationOrder ro = MTransformationMatrix::kXYZ;
-        matrix.setRotation(newRot1, ro, MSpace::kWorld);
+        matrix.setRotation(newRot, ro, MSpace::kWorld);
         
         for(int j = 0; j < cylinderRet.numVertices; ++j)
         {
@@ -475,12 +475,12 @@ ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, MVector pos, MVector
         MVector newPos = MVector(offDis(gen), offDis(gen), offDis(gen));
         matrix.setTranslation(newPos, MSpace::kWorld);
         
-        double newScale1[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
-        matrix.setScale(newScale1, MSpace::kWorld);
+        double newScale[3] = { scaleDis(gen), scaleDis(gen), scaleDis(gen) };
+        matrix.setScale(newScale, MSpace::kWorld);
         
-        double newRot1[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
+        double newRot[3] = { rotDis(gen) * degtoRad, rotDis(gen) * degtoRad, rotDis(gen) * degtoRad };
         MTransformationMatrix::RotationOrder ro = MTransformationMatrix::kXYZ;
-        matrix.setRotation(newRot1, ro, MSpace::kWorld);
+        matrix.setRotation(newRot, ro, MSpace::kWorld);
         
         for(int j = 0; j < capsuleRet.numVertices; ++j)
         {
