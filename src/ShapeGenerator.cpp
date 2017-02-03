@@ -187,7 +187,6 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, MVector pos, MVect
         23, 12, 25,
     };
     
-    //cylinderRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
     cylinderRet.numVertices = 26;
     cylinderRet.vertices = MPointArray();
 
@@ -459,7 +458,6 @@ ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, MVector pos, MVector
         71, 60, 73,
     };
     
-    //capsuleRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
     capsuleRet.numVertices = 74;
     capsuleRet.vertices = MPointArray();
     
