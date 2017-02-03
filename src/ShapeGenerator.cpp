@@ -38,10 +38,11 @@ ShapeData ShapeGenerator::GenerateCubes(int numCubes, MVector pos, MVector rot, 
         4, 0, 2,
     };
     
-    cubeRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    //cubeRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    cubeRet.numVertices = 8;
     cubeRet.vertices = MPointArray();
     
-    cubeRet.numIndices = sizeof(indices) / sizeof(*indices);
+    cubeRet.numIndices = 36;
     cubeRet.indices = new MUintArray();
     
     for(int i = 0; i < numCubes; ++i)
@@ -70,9 +71,9 @@ ShapeData ShapeGenerator::GenerateCubes(int numCubes, MVector pos, MVector rot, 
             AddCubeVertex(newVertexPosition);
         }
         
-        for(unsigned int k = 0; k < (cubeRet.numIndices); ++k)
+        for(unsigned int k = 0; k < cubeRet.numIndices; ++k)
         {
-            cubeRet.indices->append((indices[k] + (cubeRet.numVertices * i)));
+            cubeRet.indices->append(indices[k] + (cubeRet.numVertices * i));
         }
     }
 
@@ -186,10 +187,11 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, MVector pos, MVect
         23, 12, 25,
     };
     
-    cylinderRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    //cylinderRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    cylinderRet.numVertices = 26;
     cylinderRet.vertices = MPointArray();
-    
-    cylinderRet.numIndices = sizeof(indices) / sizeof(*indices);
+
+    cylinderRet.numIndices = 144;
     cylinderRet.indices = new MUintArray();
     
     for(int i = 0; i < numCylinders; ++i)
@@ -218,9 +220,9 @@ ShapeData ShapeGenerator::GenerateCylinders(int numCylinders, MVector pos, MVect
             AddCylinderVertex(newVertexPosition);
         }
         
-        for(unsigned int k = 0; k < (cylinderRet.numIndices); ++k)
+        for(unsigned int k = 0; k < cylinderRet.numIndices; ++k)
         {
-            cylinderRet.indices->append((indices[k] + (cylinderRet.numVertices * i)));
+            cylinderRet.indices->append(indices[k] + (cylinderRet.numVertices * i));
         }
     }
     
@@ -457,10 +459,11 @@ ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, MVector pos, MVector
         71, 60, 73,
     };
     
-    capsuleRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    //capsuleRet.numVertices = sizeof(vertexPositions) / sizeof(*vertexPositions);
+    capsuleRet.numVertices = 74;
     capsuleRet.vertices = MPointArray();
     
-    capsuleRet.numIndices = sizeof(indices) / sizeof(*indices);
+    capsuleRet.numIndices = 432;
     capsuleRet.indices = new MUintArray();
     
     for(int i = 0; i < numCapsules; ++i)
@@ -489,9 +492,9 @@ ShapeData ShapeGenerator::GenerateCapsules(int numCapsules, MVector pos, MVector
             AddCapsuleVertex(newVertexPosition);
         }
         
-        for(unsigned int k = 0; k < (capsuleRet.numIndices); ++k)
+        for(unsigned int k = 0; k < capsuleRet.numIndices; ++k)
         {
-            capsuleRet.indices->append((indices[k] + (capsuleRet.numVertices * i)));
+            capsuleRet.indices->append(indices[k] + (capsuleRet.numVertices * i));
         }
     }
     
